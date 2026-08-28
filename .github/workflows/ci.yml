@@ -10,20 +10,19 @@ jobs:
   test:
     name: CI - Testes automatizados
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
-
-      - name: Configurar python
-        uses: actions/setup-python@v5
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.11'
-
-      - name: Instalar dependencias
-        run: pip install -r requirements.txt -r requirements-test.txt
-
-      - name: Rodar Testes
-        run: pytest
+          node-version: '20'
+          cache: 'npm'
+      - name: Instalar dependências
+        run: npm ci
+      - name: Rodar testes
+        run: npm test
 
   build-and-push:
     name: CD - Build e push da imagem Docker
