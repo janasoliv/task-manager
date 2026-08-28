@@ -20,7 +20,22 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - name: Instalar dependências
-        run: npm ci 
+        run: npm ci
+
+      - name: Subir aplicação e banco
+        run: docker compose up -d --build
+
+      - name: Aguardar aplicação iniciar
+        run: |
+          for i in {1..30}; do
+            if curl -f http://localhost:3000/api/health; then
+              exit 0
+            fi
+            sleep 3
+          done
+
+          docker compose logs
+          exit 1
       - name: Rodar testes
         run: npm test
 
